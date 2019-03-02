@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  npm:
+    entrypoint: npm
+    image: lambci/lambda:build-nodejs8.10
+    volumes:
+      - ./:/var/task
+
+  package:
+    command: >-
+      sh -c "
+        rm -rf nodejs node_modules &&
+        mkdir -p nodejs &&
+        npm install &&
+        mv node_modules nodejs/node_modules &&
+        zip -r package.zip nodejs
+      "
+    image: lambci/lambda:build-nodejs8.10
+    volumes:
+    - ./:/var/task
